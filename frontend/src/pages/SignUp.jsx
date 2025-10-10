@@ -1,6 +1,10 @@
+import axios from "axios";
 import { useState } from "react";
 import { IoIosEye, IoIosEyeOff } from "react-icons/io";
+import { ClipLoader } from "react-spinners";
+import { serverUrl } from "../App";
 import logo from "../assets/logo2.png";
+import logo1 from "../assets/logo3.png";
 
 const SignUp = () => {
   const [inputClicked, setInputClicked] = useState({
@@ -11,6 +15,39 @@ const SignUp = () => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const [name, setName] = useState("");
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSignUp = async () => {
+    setLoading(true);
+    try {
+      const result = await axios.post(
+        `${serverUrl}/api/auth/signup`,
+        {
+          name,
+          userName,
+          email,
+          password,
+        },
+        { withCredentials: true }
+      );
+      console.log("Sign up successful:", result.data);
+      alert("Sign up successful!");
+      setLoading(false);
+    } catch (error) {
+      console.error("Error signing up:", error);
+      setLoading(false);
+      // Display the actual error message from backend
+      const errorMessage =
+        error.response?.data?.message || error.message || "Sign up failed!";
+      alert(errorMessage);
+      console.log("Full error response:", error.response?.data);
+    }
+  };
   return (
     <div className="w-full h-screen bg-gradient-to-b from-black to-gray-900 flex flex-col justify-around items-center">
       <div className="w-[90%] lg:max-w-[60%] h-[600px] bg-white rounded-2xl flex justify-center items-center overflow-hidden border-2 border-[#1a1f23]">
@@ -37,12 +74,13 @@ const SignUp = () => {
               id="name"
               className="w-[100%] h-[100%] rounded-2xl px-[20px] outline-none border-0"
               required
+              onChange={(e) => setName(e.target.value)}
             />
           </div>
 
           {/* userName */}
           <div
-            className="relative flex items-center justify-start w-[90%] h-[50px] rounded-2xl mt-[30px] border-2 border-black"
+            className="relative flex items-center justify-start w-[90%] h-[50px] rounded-2xl  border-2 border-black"
             onClick={() => setInputClicked({ ...inputClicked, userName: true })}
           >
             <label
@@ -58,12 +96,13 @@ const SignUp = () => {
               id="userName"
               className="w-[100%] h-[100%] rounded-2xl px-[20px] outline-none border-0"
               required
+              onChange={(e) => setUserName(e.target.value)}
             />
           </div>
 
           {/* email */}
           <div
-            className="relative flex items-center justify-start w-[90%] h-[50px] rounded-2xl mt-[30px] border-2 border-black"
+            className="relative flex items-center justify-start w-[90%] h-[50px] rounded-2xl  border-2 border-black"
             onClick={() => setInputClicked({ ...inputClicked, email: true })}
           >
             <label
@@ -79,12 +118,13 @@ const SignUp = () => {
               id="email"
               className="w-[100%] h-[100%] rounded-2xl px-[20px] outline-none border-0"
               required
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
           {/* password */}
           <div
-            className="relative flex items-center justify-start w-[90%] h-[50px] rounded-2xl mt-[30px] border-2 border-black"
+            className="relative flex items-center justify-start w-[90%] h-[50px] rounded-2xl  border-2 border-black"
             onClick={() => setInputClicked({ ...inputClicked, password: true })}
           >
             <label
@@ -100,6 +140,7 @@ const SignUp = () => {
               id="password"
               className="w-[100%] h-[100%] rounded-2xl px-[20px] outline-none border-0"
               required
+              onChange={(e) => setPassword(e.target.value)}
             />
 
             {!showPassword ? (
@@ -120,8 +161,23 @@ const SignUp = () => {
               />
             )}
           </div>
+          <button
+            className="w-[70%] px-[20px] py-[10px] bg-black text-white font-semibold h-[50px] cursor-pointer rounded-2xl mt-[30px]"
+            onClick={handleSignUp}
+            disabled={loading}
+          >
+            {loading ? <ClipLoader size={30} color={"white"} /> : "Sign Up"}
+          </button>
+          <p className="cursor-pointer text-gray-800">
+            Already have an account ?{" "}
+            <span className="border-b-2 border-b-black pb-[3px] text-black">
+              Sign In
+            </span>
+          </p>
         </div>
-        <div className="md:w-[50%] h-full hidden lg:flex justify-center items-center bg-[#000000] flex-col gap-[10px] text-white text-[16px] font-semibold rounded-l-[30px] shadow-2xl shadow-black"></div>
+        <div className="md:w-[50%] h-full hidden lg:flex justify-center items-center bg-[#000000] flex-col gap-[10px] text-white text-[16px] font-semibold rounded-l-[30px] shadow-2xl shadow-black">
+          <img src={logo1} alt="Logo" className="w-[70%]" />
+        </div>
       </div>
     </div>
   );
