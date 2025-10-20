@@ -5,6 +5,7 @@ import { ClipLoader } from "react-spinners";
 import { serverUrl } from "../App";
 import logo from "../assets/logo2.png";
 import logo1 from "../assets/logo3.png";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const [inputClicked, setInputClicked] = useState({
@@ -21,6 +22,7 @@ const SignUp = () => {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSignUp = async () => {
     setLoading(true);
@@ -168,7 +170,7 @@ const SignUp = () => {
           >
             {loading ? <ClipLoader size={30} color={"white"} /> : "Sign Up"}
           </button>
-          <p className="cursor-pointer text-gray-800">
+          <p className="cursor-pointer text-gray-800" onClick={() => navigate('/signin')}>
             Already have an account ?{" "}
             <span className="border-b-2 border-b-black pb-[3px] text-black">
               Sign In
