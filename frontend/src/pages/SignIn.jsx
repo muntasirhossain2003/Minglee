@@ -47,7 +47,7 @@ const SignIn = () => {
   return (
     <div className="w-full h-screen bg-gradient-to-b from-black to-gray-900 flex flex-col justify-around items-center">
       <div className="w-[90%] lg:max-w-[60%] h-[600px] bg-white rounded-2xl flex justify-center items-center overflow-hidden border-2 border-[#1a1f23]">
-        <div className="w-full lg:w-[50%] h-full bg-white flex flex-col items-center p-[10px] gap-[20px]">
+        <div className="w-full lg:w-[50%] h-full bg-white flex flex-col items-center justify-center p-[10px] gap-[20px]">
           <div className="flex gap-[10px] items-center text-[20px] font-semibold mt-[40px]">
             <span>Sign In to</span>
             <img src={logo} alt="Logo" className="w-[100px]" />
@@ -114,12 +114,19 @@ const SignIn = () => {
               />
             )}
           </div>
+          {/* forget password */}
+          <div
+            className="w-[90%] px-[20px] cursor-pointer"
+            onClick={() => navigate("/forgot-password")}
+          >
+            Forgot Password
+          </div>
           <button
             className="w-[70%] px-[20px] py-[10px] bg-black text-white font-semibold h-[50px] cursor-pointer rounded-2xl mt-[30px]"
             onClick={handleSignIn}
             disabled={loading}
           >
-            {loading ? <ClipLoader size={30} color={"white"} /> : "Sign Up"}
+            {loading ? <ClipLoader size={30} color={"white"} /> : "Sign In"}
           </button>
           <p
             className="cursor-pointer text-gray-800"
@@ -127,7 +134,7 @@ const SignIn = () => {
           >
             Want to create a new account ?{" "}
             <span className="border-b-2 border-b-black pb-[3px] text-black">
-              Sign Up
+              Sign In
             </span>
           </p>
         </div>
