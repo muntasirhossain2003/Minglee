@@ -77,6 +77,7 @@ const SignUp = () => {
               className="w-[100%] h-[100%] rounded-2xl px-[20px] outline-none border-0"
               required
               onChange={(e) => setName(e.target.value)}
+              value={name}
             />
           </div>
 
@@ -99,6 +100,7 @@ const SignUp = () => {
               className="w-[100%] h-[100%] rounded-2xl px-[20px] outline-none border-0"
               required
               onChange={(e) => setUserName(e.target.value)}
+              value={userName}
             />
           </div>
 
@@ -121,6 +123,7 @@ const SignUp = () => {
               className="w-[100%] h-[100%] rounded-2xl px-[20px] outline-none border-0"
               required
               onChange={(e) => setEmail(e.target.value)}
+              value={email}
             />
           </div>
 
@@ -143,6 +146,7 @@ const SignUp = () => {
               className="w-[100%] h-[100%] rounded-2xl px-[20px] outline-none border-0"
               required
               onChange={(e) => setPassword(e.target.value)}
+              value={password}
             />
 
             {!showPassword ? (
