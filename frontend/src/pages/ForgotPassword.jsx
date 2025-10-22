@@ -1,13 +1,18 @@
 import { useState } from "react";
 import { ClipLoader } from "react-spinners";
 const ForgotPassword = () => {
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(3);
   const [inputClicked, setInputClicked] = useState({
     email: false,
     otp: false,
+    newPassword: false,
+    confirmNewPassword: false,
   });
   const [email, setEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [otp, setOtp] = useState("");
+
   const [loading, setLoading] = useState(false);
 
   return (
@@ -76,6 +81,64 @@ const ForgotPassword = () => {
             disabled={loading}
           >
             {loading ? <ClipLoader size={30} color={"white"} /> : "Submit OTP"}
+          </button>
+        </div>
+      )}
+
+      {step == 3 && (
+        <div className="w-[90%] max-w-[500px] h-[500px] bg-white rounded-2xl flex justify-center items-center flex-col border-[#1a1f23]">
+          <h2 className="text-[30px] font-semibold">Reset Password</h2>
+          {/* new password */}
+          <div
+            className="relative flex items-center mt-[30px] justify-start w-[90%] h-[50px] rounded-2xl  border-2 border-black"
+            onClick={() =>
+              setInputClicked({ ...inputClicked, newPassword: true })
+            }
+          >
+            <label
+              htmlFor="newPassword"
+              className={`text-gray-700 absolute left-[20px] p-[5px] bg-white text-[15px] ${
+                inputClicked.newPassword ? "top-[-15px]" : ""
+              } `}
+            >
+              Enter New Password
+            </label>
+            <input
+              type="password"
+              id="newPassword"
+              className="w-[100%] h-[100%] rounded-2xl px-[20px] outline-none border-0"
+              required
+              onChange={(e) => setNewPassword(e.target.value)}
+              value={newPassword}
+            />
+          </div>
+          {/* Confirm password */}
+          <div
+            className="relative flex items-center mt-[30px] justify-start w-[90%] h-[50px] rounded-2xl  border-2 border-black"
+            onClick={() => setInputClicked({ ...inputClicked, confirmNewPassword: true })}
+          >
+            <label
+              htmlFor="confirmNewPassword"
+              className={`text-gray-700 absolute left-[20px] p-[5px] bg-white text-[15px] ${
+                inputClicked.otp ? "top-[-15px]" : ""
+              } `}
+            >
+              Confirm New Password
+            </label>
+            <input
+              type="password"
+              id="confirmNewPassword"
+              className="w-[100%] h-[100%] rounded-2xl px-[20px] outline-none border-0"
+              required
+              onChange={(e) => setConfirmNewPassword(e.target.value)}
+              value={confirmNewPassword}
+            />
+          </div>
+          <button
+            className="w-[70%] px-[20px] py-[10px] bg-black text-white font-semibold h-[50px] cursor-pointer rounded-2xl mt-[30px]"
+            disabled={loading}
+          >
+            {loading ? <ClipLoader size={30} color={"white"} /> : "Reset Password"}
           </button>
         </div>
       )}
