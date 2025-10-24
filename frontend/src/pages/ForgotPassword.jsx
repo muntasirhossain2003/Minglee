@@ -1,7 +1,10 @@
+import axios from "axios";
 import { useState } from "react";
 import { ClipLoader } from "react-spinners";
+import { serverUrl } from "../App";
+
 const ForgotPassword = () => {
-  const [step, setStep] = useState(3);
+  const [step, setStep] = useState(1);
   const [inputClicked, setInputClicked] = useState({
     email: false,
     otp: false,
@@ -14,6 +17,61 @@ const ForgotPassword = () => {
   const [otp, setOtp] = useState("");
 
   const [loading, setLoading] = useState(false);
+  const handleStep1 = async () => {
+    setLoading(true);
+    try {
+      const result = await axios.post(
+        `${serverUrl}/api/auth/sendOtp`,
+        { email },
+        { withCredentials: true }
+      );
+      console.log("OTP sent:", result.data);
+
+      setLoading(false);
+      setStep(2);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  const handleStep2 = async () => {
+    setLoading(true);
+    try {
+      const result = await axios.post(
+        `${serverUrl}/api/auth/verifyOtp`,
+        { email, otp },
+        { withCredentials: true }
+      );
+      console.log("OTP verified:", result.data);
+
+      setLoading(false);
+      setStep(3);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  const handleStep3 = async () => {
+    setLoading(true);
+    try {
+      if (newPassword !== confirmNewPassword) {
+        alert("Passwords do not match!");
+        return console.log("Passwords do not match!");
+      }
+      const result = await axios.post(
+        `${serverUrl}/api/auth/resetPassword`,
+        { email, password: newPassword },
+        { withCredentials: true }
+      );
+      console.log("Password reset:", result.data);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="w-full h-screen bg-gradient-to-b from-black to-gray-900 flex flex-col justify-around items-center">
@@ -45,6 +103,7 @@ const ForgotPassword = () => {
           <button
             className="w-[70%] px-[20px] py-[10px] bg-black text-white font-semibold h-[50px] cursor-pointer rounded-2xl mt-[30px]"
             disabled={loading}
+            onClick={handleStep1}
           >
             {loading ? <ClipLoader size={30} color={"white"} /> : "Send OTP"}
           </button>
@@ -79,6 +138,7 @@ const ForgotPassword = () => {
           <button
             className="w-[70%] px-[20px] py-[10px] bg-black text-white font-semibold h-[50px] cursor-pointer rounded-2xl mt-[30px]"
             disabled={loading}
+            onClick={handleStep2}
           >
             {loading ? <ClipLoader size={30} color={"white"} /> : "Submit OTP"}
           </button>
@@ -115,7 +175,9 @@ const ForgotPassword = () => {
           {/* Confirm password */}
           <div
             className="relative flex items-center mt-[30px] justify-start w-[90%] h-[50px] rounded-2xl  border-2 border-black"
-            onClick={() => setInputClicked({ ...inputClicked, confirmNewPassword: true })}
+            onClick={() =>
+              setInputClicked({ ...inputClicked, confirmNewPassword: true })
+            }
           >
             <label
               htmlFor="confirmNewPassword"
@@ -137,8 +199,13 @@ const ForgotPassword = () => {
           <button
             className="w-[70%] px-[20px] py-[10px] bg-black text-white font-semibold h-[50px] cursor-pointer rounded-2xl mt-[30px]"
             disabled={loading}
+            onClick={handleStep3}
           >
-            {loading ? <ClipLoader size={30} color={"white"} /> : "Reset Password"}
+            {loading ? (
+              <ClipLoader size={30} color={"white"} />
+            ) : (
+              "Reset Password"
+            )}
           </button>
         </div>
       )}

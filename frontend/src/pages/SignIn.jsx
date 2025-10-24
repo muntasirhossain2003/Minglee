@@ -134,7 +134,7 @@ const SignIn = () => {
           >
             Want to create a new account ?{" "}
             <span className="border-b-2 border-b-black pb-[3px] text-black">
-              Sign In
+              Sign Up
             </span>
           </p>
         </div>

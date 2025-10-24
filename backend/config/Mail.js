@@ -1,7 +1,8 @@
-import nodeMailer from "nodemailer";
+import nodemailer from "nodemailer";
+
 
 const transporter = nodemailer.createTransport({
-  hostservice: "Gmail",
+  service: "Gmail",
   port: 465,
   secure: true, // true for 465, false for other ports
   auth: {
@@ -11,8 +12,8 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendMail = async (to, otp) => {
-    transporter.sendMail({
-        from: process.env.EMAIL,
+    await transporter.sendMail({
+        from: `${process.env.EMAIL}`,
         to: to,
         subject: "Minglee Password Reset OTP",
         html: `<p>Your OTP for password reset is:<b>${otp}</b>. It is valid for 5 minutes.</p>`,
