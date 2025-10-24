@@ -12,7 +12,10 @@ const userSchema = new mongoose.Schema(
     posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
     saved: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
     loops: [{ type: mongoose.Schema.Types.ObjectId, ref: "Loop" }],
-    stories: [{ type: mongoose.Schema.Types.ObjectId, ref: "Story" }],
+    story: [{ type: mongoose.Schema.Types.ObjectId, ref: "Story" }],
+    resetOtp: { type: String },
+    otpExpires : { type: Date },
+    isOtpVerified: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
