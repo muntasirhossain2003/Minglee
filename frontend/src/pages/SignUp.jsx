@@ -1,11 +1,11 @@
 import axios from "axios";
 import { useState } from "react";
 import { IoIosEye, IoIosEyeOff } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import { serverUrl } from "../App";
 import logo from "../assets/logo2.png";
 import logo1 from "../assets/logo3.png";
-import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const [inputClicked, setInputClicked] = useState({
@@ -20,12 +20,14 @@ const SignUp = () => {
 
   const [name, setName] = useState("");
   const [userName, setUserName] = useState("");
+  const [err, setErr] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleSignUp = async () => {
     setLoading(true);
+    setErr("");
     try {
       const result = await axios.post(
         `${serverUrl}/api/auth/signup`,
@@ -41,13 +43,9 @@ const SignUp = () => {
       alert("Sign up successful!");
       setLoading(false);
     } catch (error) {
-      console.error("Error signing up:", error);
+      setErr(error.response?.data?.message);
+      console.log(error);
       setLoading(false);
-      // Display the actual error message from backend
-      const errorMessage =
-        error.response?.data?.message || error.message || "Sign up failed!";
-      alert(errorMessage);
-      console.log("Full error response:", error.response?.data);
     }
   };
   return (
@@ -167,6 +165,8 @@ const SignUp = () => {
               />
             )}
           </div>
+          {err && <p className="text-red-500">{err}</p>}
+
           <button
             className="w-[70%] px-[20px] py-[10px] bg-black text-white font-semibold h-[50px] cursor-pointer rounded-2xl mt-[30px]"
             onClick={handleSignUp}
@@ -174,7 +174,10 @@ const SignUp = () => {
           >
             {loading ? <ClipLoader size={30} color={"white"} /> : "Sign Up"}
           </button>
-          <p className="cursor-pointer text-gray-800" onClick={() => navigate('/signin')}>
+          <p
+            className="cursor-pointer text-gray-800"
+            onClick={() => navigate("/signin")}
+          >
             Already have an account ?{" "}
             <span className="border-b-2 border-b-black pb-[3px] text-black">
               Sign In

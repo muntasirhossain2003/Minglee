@@ -17,11 +17,13 @@ const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userName, setUserName] = useState("");
+  const [err, setErr] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleSignIn = async () => {
     setLoading(true);
+    setErr("");
     try {
       const result = await axios.post(
         `${serverUrl}/api/auth/signin`,
@@ -35,13 +37,9 @@ const SignIn = () => {
       alert("Sign In successful!");
       setLoading(false);
     } catch (error) {
-      console.error("Error signing In:", error);
+      setErr(error.response?.data?.message);
+      console.log(error);
       setLoading(false);
-      // Display the actual error message from backend
-      const errorMessage =
-        error.response?.data?.message || error.message || "Sign In failed!";
-      alert(errorMessage);
-      console.log("Full error response:", error.response?.data);
     }
   };
   return (
@@ -121,6 +119,7 @@ const SignIn = () => {
           >
             Forgot Password
           </div>
+          {err && <div className="text-red-500">{err}</div>}
           <button
             className="w-[70%] px-[20px] py-[10px] bg-black text-white font-semibold h-[50px] cursor-pointer rounded-2xl mt-[30px]"
             onClick={handleSignIn}
