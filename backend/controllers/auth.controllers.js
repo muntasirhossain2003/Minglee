@@ -1,6 +1,7 @@
-import bcrypt from "bcryptjs";
+import bcrypt, { truncates } from "bcryptjs";
 import genToken from "../config/token.js";
 import User from "../models/user.model.js";
+import sendMail from "../config/Mail.js";
 
 export const signUp = async (req, res) => {
   try {
@@ -74,4 +75,28 @@ export const signOut = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: `SignOut error: ${error}` });
     }
+}
+
+const sendOtp = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "User with this email does not exist!" });
+    }
+    // Generate OTP
+    const otp = Math.floor(1000 + Math.random() * 9000).toString();
+    // Set OTP expiration time (5 minutes from now)
+    const otpExpires = new Date(Date.now() + 5 * 60 * 1000);  
+    user.resetOtp = otp;
+    user.otpExpires = otpExpires;
+    user.isOtpVerified = false;
+    await user.save();
+    await sendMail(email, otp);
+    return res.status(200).json({ message: "OTP sent to email!" });    
+    
+  } catch (error) {
+    return res.status(500).json({ message: `Error sending OTP: ${error}` });
+  }
+    // To be implemented
 }
