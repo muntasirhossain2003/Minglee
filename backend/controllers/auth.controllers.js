@@ -1,7 +1,7 @@
-import bcrypt, { truncates } from "bcryptjs";
+import bcrypt from "bcryptjs";
+import sendMail from "../config/Mail.js";
 import genToken from "../config/token.js";
 import User from "../models/user.model.js";
-import sendMail from "../config/Mail.js";
 
 export const signUp = async (req, res) => {
   try {
@@ -87,7 +87,7 @@ export const sendOtp = async (req, res) => {
     // Generate OTP
     const otp = Math.floor(1000 + Math.random() * 9000).toString();
     // Set OTP expiration time (5 minutes from now)
-    const otpExpires = new Date(Date.now() + 5 * 60 * 1000);  
+    const otpExpires = (Date.now() + 5 * 60 * 1000);  
     user.resetOtp = otp;
     user.otpExpires = otpExpires;
     user.isOtpVerified = false;
