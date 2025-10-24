@@ -9,3 +9,15 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS,
   },
 });
+
+const sendMail = async (to, otp) => {
+    transporter.sendMail({
+        from: process.env.EMAIL,
+        to: to,
+        subject: "Minglee Password Reset OTP",
+        html: `<p>Your OTP for password reset is:<b>${otp}</b>. It is valid for 5 minutes.</p>`,
+    });
+  
+};
+
+export default sendMail;
