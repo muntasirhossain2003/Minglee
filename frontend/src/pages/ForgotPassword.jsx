@@ -13,12 +13,14 @@ const ForgotPassword = () => {
   });
   const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [err, setErr] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [otp, setOtp] = useState("");
 
   const [loading, setLoading] = useState(false);
   const handleStep1 = async () => {
     setLoading(true);
+    setErr("");
     try {
       const result = await axios.post(
         `${serverUrl}/api/auth/sendOtp`,
@@ -32,11 +34,13 @@ const ForgotPassword = () => {
     } catch (error) {
       console.log(error);
       setLoading(false);
+      setErr(error.response?.data?.message);
     }
   };
 
   const handleStep2 = async () => {
     setLoading(true);
+    setErr("");
     try {
       const result = await axios.post(
         `${serverUrl}/api/auth/verifyOtp`,
@@ -50,16 +54,19 @@ const ForgotPassword = () => {
     } catch (error) {
       console.log(error);
       setLoading(false);
+      setErr(error.response?.data?.message);
     }
   };
 
   const handleStep3 = async () => {
+    if (newPassword !== confirmNewPassword) {
+        return setErr("Passwords do not match!");
+      }
+    
+    setErr("");
     setLoading(true);
     try {
-      if (newPassword !== confirmNewPassword) {
-        alert("Passwords do not match!");
-        return console.log("Passwords do not match!");
-      }
+      
       const result = await axios.post(
         `${serverUrl}/api/auth/resetPassword`,
         { email, password: newPassword },
@@ -70,6 +77,7 @@ const ForgotPassword = () => {
     } catch (error) {
       console.log(error);
       setLoading(false);
+      setErr(error.response?.data?.message);
     }
   };
 
@@ -100,6 +108,7 @@ const ForgotPassword = () => {
               value={email}
             />
           </div>
+          {err && <div className="text-red-500">{err}</div>}
           <button
             className="w-[70%] px-[20px] py-[10px] bg-black text-white font-semibold h-[50px] cursor-pointer rounded-2xl mt-[30px]"
             disabled={loading}
@@ -135,6 +144,7 @@ const ForgotPassword = () => {
               value={otp}
             />
           </div>
+          {err && <div className="text-red-500">{err}</div>}
           <button
             className="w-[70%] px-[20px] py-[10px] bg-black text-white font-semibold h-[50px] cursor-pointer rounded-2xl mt-[30px]"
             disabled={loading}
@@ -196,6 +206,7 @@ const ForgotPassword = () => {
               value={confirmNewPassword}
             />
           </div>
+          {err && <div className="text-red-500">{err}</div>}
           <button
             className="w-[70%] px-[20px] py-[10px] bg-black text-white font-semibold h-[50px] cursor-pointer rounded-2xl mt-[30px]"
             disabled={loading}
