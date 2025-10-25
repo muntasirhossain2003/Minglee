@@ -6,6 +6,8 @@ import { ClipLoader } from "react-spinners";
 import { serverUrl } from "../App";
 import logo from "../assets/logo2.png";
 import logo1 from "../assets/logo3.png";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../redux/userSlice";
 
 const SignUp = () => {
   const [inputClicked, setInputClicked] = useState({
@@ -24,10 +26,12 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSignUp = async () => {
     setLoading(true);
     setErr("");
+
     try {
       const result = await axios.post(
         `${serverUrl}/api/auth/signup`,
@@ -39,7 +43,7 @@ const SignUp = () => {
         },
         { withCredentials: true }
       );
-      console.log("Sign up successful:", result.data);
+      dispatch(setUserData(result.data));
       alert("Sign up successful!");
       setLoading(false);
     } catch (error) {
