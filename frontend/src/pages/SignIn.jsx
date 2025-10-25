@@ -1,15 +1,17 @@
 import axios from "axios";
 import { useState } from "react";
 import { IoIosEye, IoIosEyeOff } from "react-icons/io";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import { serverUrl } from "../App";
 import logo from "../assets/logo2.png";
 import logo1 from "../assets/logo3.png";
+import { setUserData } from "../redux/userSlice";
 
 const SignIn = () => {
   const [inputClicked, setInputClicked] = useState({
-    useName: false,
+    userName: false,
 
     password: false,
   });
@@ -20,6 +22,7 @@ const SignIn = () => {
   const [err, setErr] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSignIn = async () => {
     setLoading(true);
@@ -33,7 +36,7 @@ const SignIn = () => {
         },
         { withCredentials: true }
       );
-      console.log("Sign In successful:", result.data);
+      dispatch(setUserData(result.data));
       alert("Sign In successful!");
       setLoading(false);
     } catch (error) {
