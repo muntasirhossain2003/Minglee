@@ -3,6 +3,7 @@ import { FaRegHeart } from "react-icons/fa";
 import { IoChevronBackCircle, IoChevronForwardCircle } from "react-icons/io5";
 import logo from "../assets/icon.png";
 import StoryDp from "./StoryDp";
+import Nav from "./Nav";
 
 const Feed = () => {
   const scrollContainerRef = useRef(null);
@@ -12,7 +13,8 @@ const Feed = () => {
   // Check if scroll buttons should be visible
   const checkScrollButtons = () => {
     if (scrollContainerRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      const { scrollLeft, scrollWidth, clientWidth } =
+        scrollContainerRef.current;
       setShowLeftButton(scrollLeft > 0);
       setShowRightButton(scrollLeft < scrollWidth - clientWidth - 10);
     }
@@ -97,6 +99,11 @@ const Feed = () => {
             <IoChevronForwardCircle className="text-white w-full h-full drop-shadow-lg" />
           </button>
         )}
+      </div>
+
+      {/* feed content */}
+      <div className="w-full min-h-[100vh] flex flex-col items-center gap-[20px] p-[10px] pt-[40px] bg-white rounded-t-[60px] relative pb-[120px]">
+        <Nav />
       </div>
     </div>
   );
