@@ -24,6 +24,7 @@ function OtherUser({ user }) {
           </div>
         </div>
       </div>
+      <button className="px-[10px] w-[100px] py-[5px] h-[40px] bg-white rounded-2xl">Follow</button>
     </div>
   );
 }
