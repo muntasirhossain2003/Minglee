@@ -5,8 +5,9 @@ import { serverUrl } from "../App";
 import dp from "../assets/empty_dp.png";
 import logo from "../assets/icon.png";
 import { setUserData } from "../redux/userSlice";
+import OtherUser from "./OtherUser";
 const LeftHome = () => {
-  const { userData } = useSelector((state) => state.user);
+  const { userData, suggestedUsers } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const handleLogOut = async () => {
     try {
@@ -31,7 +32,7 @@ const LeftHome = () => {
 
       {/* profile image and profile name */}
 
-      <div className="flex items-center w-full justify-between gap-[10px] p-[10px] ">
+      <div className="flex items-center w-full justify-between gap-[10px] p-[10px] border-b-2 border-gray-900 py-[10px]">
         <div className="flex items-center gap-[10px]">
           {/* profile pic */}
           <div className="w-[70px] h-[70px] border-2 border-black rounded-full cursor-pointer overflow-hidden">
@@ -57,6 +58,15 @@ const LeftHome = () => {
         >
           Log Out
         </div>
+      </div>
+      {/* suggested users */}
+      <div className="w-full flex-col gap-[20px] p-[20px]">
+        <h1 className="text-white text-[19px]">Suggested Users</h1>
+        {/* user list */}
+        
+        {suggestedUsers && suggestedUsers.slice(0,3).map((user,index) => (
+          <OtherUser key={index} user={user} />
+        ))}
       </div>
     </div>
   );

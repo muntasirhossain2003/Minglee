@@ -1,3 +1,4 @@
+
 import User from "../models/user.model.js";
 
 export const getCurrentUser =  async (req, res) => {
@@ -10,5 +11,15 @@ export const getCurrentUser =  async (req, res) => {
         return res.status(200).json({ user });
     } catch (error) {
         return res.status(500).json({ message: `Get current user error: ${error}` });
+    }
+}
+
+
+export const suggestedUsers = async (req, res) => {
+    try {
+        const users = await User.find({ _id: { $ne: req.userId } }).select("-password");
+        return res.status(200).json({ users });
+    } catch (error) {
+        return res.status(500).json({ message: `get Suggested users error: ${error}` });
     }
 }
