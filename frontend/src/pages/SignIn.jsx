@@ -36,8 +36,7 @@ const SignIn = () => {
         },
         { withCredentials: true }
       );
-      dispatch(setUserData(result.data));
-      alert("Sign In successful!");
+      dispatch(setUserData(result.data));     
       setLoading(false);
     } catch (error) {
       setErr(error.response?.data?.message);
