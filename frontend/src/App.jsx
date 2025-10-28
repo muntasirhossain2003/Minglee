@@ -6,7 +6,7 @@ import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import getSuggestedUsers from "./hooks/gerSuggestedUsers";
-import { Profile } from "./pages/Profile";
+import Profile  from "./pages/Profile";
 
 export const serverUrl = "http://localhost:8000";
 
