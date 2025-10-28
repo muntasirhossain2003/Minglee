@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import getSuggestedUsers from "./hooks/gerSuggestedUsers";
+import { Profile } from "./pages/Profile";
 
 export const serverUrl = "http://localhost:8000";
 
@@ -32,6 +33,7 @@ const App = () => {
         path="/forgot-password"
         element={!userData ? <ForgotPassword /> : <Navigate to={"/"} />}
       />
+      <Route path="/profile/:userName" element={userData ? <Profile /> : <Navigate to={"/signin"} />} />
     </Routes>
   );
 };
