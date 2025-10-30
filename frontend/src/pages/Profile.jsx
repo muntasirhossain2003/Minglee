@@ -39,6 +39,7 @@ const Profile = () => {
   };
 
   useEffect(() => {
+    if (!userName) return; // avoid calling API with undefined username
     handleProfile();
   }, [userName, dispatch]);
   return (
@@ -84,7 +85,7 @@ const Profile = () => {
         {/* posts */}
         <div>
           <div className="text-white text-[20px] md:text-[30px] font-semibold">
-            {profileData?.posts.length}
+            {profileData?.posts?.length}
           </div>
           <div className="text-[18px] md:text-[22px] text-[#ffffffc7]">
             Post
@@ -117,7 +118,7 @@ const Profile = () => {
               </div>
             </div>
             <div className="text-white text-[20px] md:text-[30px] font-semibold">
-              {profileData?.followers.length}
+              {profileData?.followers?.length}
             </div>
           </div>
           <div className="text-[18px] md:text-[22px] text-[#ffffffc7]">
@@ -151,7 +152,7 @@ const Profile = () => {
               </div>
             </div>
             <div className="text-white text-[20px] md:text-[30px] font-semibold">
-              {profileData?.following.length}
+              {profileData?.following?.length}
             </div>
           </div>
           <div className="text-[18px] md:text-[22px] text-[#ffffffc7]">
