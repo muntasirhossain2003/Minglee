@@ -2,14 +2,16 @@ import axios from "axios";
 import { useEffect } from "react";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { serverUrl } from "../App";
 import dp from "../assets/empty_dp.png";
+import Nav from "../components/Nav";
 import { setProfileData, setUserData } from "../redux/userSlice";
 
 const Profile = () => {
   const { userName } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { profileData, userData } = useSelector((state) => state.user);
   const handleProfile = async () => {
     try {
@@ -43,8 +45,8 @@ const Profile = () => {
     <div className="w-full min-h-screen bg-black">
       <div className="w-full h-[80px] flex justify-between items-center px-[30px]  text-white">
         {/* backicon */}
-        <div>
-          <MdOutlineKeyboardBackspace className="text-white w-[25px] h-[25px]" />
+        <div onClick={() => navigate("/")}>
+          <MdOutlineKeyboardBackspace className="text-white cursor-pointer w-[25px] h-[25px]" />
         </div>
         {/* userName */}
         <div className="font-semibold text-[20px]">{profileData?.userName}</div>
@@ -157,13 +159,31 @@ const Profile = () => {
           </div>
         </div>
       </div>
-      <div className="w-full flex justify-center items-center gap-[20px] mt-[10px]">
+      <div className="w-full flex justify-center items-center gap-[20px] mt-[15px]">
         {/* buttons for follow/unfollow or edit profile can go here */}
-        {profileData?._id == userData?._id && <button className="px-[10px] min-w-[150px] py-[5px] h-[40px] bg-[white] cursor-pointer rounded-2xl">Edit Profile</button>}
-        {profileData?._id != userData?._id && <>
-             <button className="px-[10px] min-w-[150px] py-[5px] h-[40px] bg-[white] cursor-pointer rounded-2xl">Follow</button>
-             <button className="px-[10px] min-w-[150px] py-[5px] h-[40px] bg-[white] cursor-pointer rounded-2xl">Message</button>
-          </>}
+        {profileData?._id == userData?._id && (
+          <button
+            className="px-[10px] min-w-[150px] py-[5px] h-[40px] bg-[white] cursor-pointer rounded-2xl"
+            onClick={() => navigate("/editprofile")}
+          >
+            Edit Profile
+          </button>
+        )}
+        {profileData?._id != userData?._id && (
+          <>
+            <button className="px-[10px] min-w-[150px] py-[5px] h-[40px] bg-[white] cursor-pointer rounded-2xl">
+              Follow
+            </button>
+            <button className="px-[10px] min-w-[150px] py-[5px] h-[40px] bg-[white] cursor-pointer rounded-2xl">
+              Message
+            </button>
+          </>
+        )}
+      </div>
+      <div className="w-full min-h-[100vh] flex justify-center mt-[15px]">
+        <div className="w-full max-w-[900px] flex flex-col items-center rounded-t-[30px] bg-white relative gap-[20px] pt-[30px]">
+          <Nav />
+        </div>
       </div>
     </div>
   );
