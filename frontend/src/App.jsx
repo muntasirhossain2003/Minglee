@@ -6,12 +6,13 @@ import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import getSuggestedUsers from "./hooks/gerSuggestedUsers";
-import Profile  from "./pages/Profile";
+import Profile from "./pages/Profile";
+import EditProfile from "./pages/EditProfile";
 
 export const serverUrl = "http://localhost:8000";
 
 const App = () => {
-  getCurrentUser(); 
+  getCurrentUser();
   getSuggestedUsers();
   const { userData } = useSelector((state) => state.user);
 
@@ -33,7 +34,14 @@ const App = () => {
         path="/forgot-password"
         element={!userData ? <ForgotPassword /> : <Navigate to={"/"} />}
       />
-      <Route path="/profile/:userName" element={userData ? <Profile /> : <Navigate to={"/signin"} />} />
+      <Route
+        path="/profile/:userName"
+        element={userData ? <Profile /> : <Navigate to={"/signin"} />}
+      />
+      <Route
+        path="/editprofile"
+        element={userData ? <EditProfile /> : <Navigate to={"/signin"} />}
+      />
     </Routes>
   );
 };
