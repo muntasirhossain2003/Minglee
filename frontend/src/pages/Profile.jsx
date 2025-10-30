@@ -4,13 +4,13 @@ import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { serverUrl } from "../App";
-import { setProfileData, setUserData } from "../redux/userSlice";
 import dp from "../assets/empty_dp.png";
+import { setProfileData, setUserData } from "../redux/userSlice";
 
 const Profile = () => {
   const { userName } = useParams();
   const dispatch = useDispatch();
-  const { profileData } = useSelector((state) => state.user);
+  const { profileData, userData } = useSelector((state) => state.user);
   const handleProfile = async () => {
     try {
       const result = await axios.get(
@@ -58,39 +58,113 @@ const Profile = () => {
       </div>
       {/* profile info and posts will go here */}
       <div className="w-full h-[150] flex items-start gap-[20px] lg:gap-[50px] pt-[20px] px-[10px] justify-center">
-        
         <div className="w-[80px] h-[80px] md:w-[140px] md:h-[140px] border-2 border-black rounded-full cursor-pointer overflow-hidden">
           <img
             src={profileData?.profileImage || dp}
             alt="profile image"
             className="w-full h-full object-cover"
           />
-        </div> 
-        <div >
-          <div className="font-semibold text-[22px] text-white">{profileData?.name}</div>
-          <div className="font-semibold text-[17px] text-[#ffffffe8]">{profileData?.profession || "New User"}</div>
-          <div className="font-semibold text-[17px] text-[#ffffffe8]">{profileData?.bio}</div>
+        </div>
+        <div>
+          <div className="font-semibold text-[22px] text-white">
+            {profileData?.name}
+          </div>
+          <div className="font-semibold text-[17px] text-[#ffffffe8]">
+            {profileData?.profession || "New User"}
+          </div>
+          <div className="font-semibold text-[17px] text-[#ffffffe8]">
+            {profileData?.bio}
+          </div>
         </div>
       </div>
       {/* followers and following section */}
-      <div className='w-full h-[100px] flex items-center justify-center gap-[40px] md:gap-[60px] px-[20%] pt-[30px] text-white'>
+      <div className="w-full h-[100px] flex items-center justify-center gap-[40px] md:gap-[60px] px-[20%] pt-[30px] text-white">
         {/* posts */}
         <div>
-          <div className="text-white text-[20px] md:text-[30px] font-semibold">{profileData?.posts.length}</div>
-          <div className="text-[18px] md:text-[22px] text-[#ffffffc7]">Post</div>
+          <div className="text-white text-[20px] md:text-[30px] font-semibold">
+            {profileData?.posts.length}
+          </div>
+          <div className="text-[18px] md:text-[22px] text-[#ffffffc7]">
+            Post
+          </div>
         </div>
         {/* followers */}
         <div>
-          <div></div>
-          <div>Followers</div>
+          <div className="flex items-center justify-center gap-[20px]">
+            <div className="flex relative">
+              <div className="w-[40px] h-[40px]  border-2 border-black rounded-full cursor-pointer overflow-hidden">
+                <img
+                  src={profileData?.profileImage || dp}
+                  alt="profile image"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="w-[40px] h-[40px] absolute border-2 border-black rounded-full cursor-pointer overflow-hidden left-[9px]">
+                <img
+                  src={profileData?.profileImage || dp}
+                  alt="profile image"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="w-[40px] h-[40px] absolute border-2 border-black rounded-full cursor-pointer overflow-hidden left-[18px]">
+                <img
+                  src={profileData?.profileImage || dp}
+                  alt="profile image"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+            <div className="text-white text-[20px] md:text-[30px] font-semibold">
+              {profileData?.followers.length}
+            </div>
+          </div>
+          <div className="text-[18px] md:text-[22px] text-[#ffffffc7]">
+            Followers
+          </div>
         </div>
         {/* following */}
         <div>
-          <div></div>
-          <div>Following</div>
+          <div className="flex items-center justify-center gap-[20px]">
+            <div className="flex relative">
+              <div className="w-[40px] h-[40px]  border-2 border-black rounded-full cursor-pointer overflow-hidden">
+                <img
+                  src={profileData?.profileImage || dp}
+                  alt="profile image"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="w-[40px] h-[40px] absolute border-2 border-black rounded-full cursor-pointer overflow-hidden left-[9px]">
+                <img
+                  src={profileData?.profileImage || dp}
+                  alt="profile image"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="w-[40px] h-[40px] absolute border-2 border-black rounded-full cursor-pointer overflow-hidden left-[18px]">
+                <img
+                  src={profileData?.profileImage || dp}
+                  alt="profile image"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+            <div className="text-white text-[20px] md:text-[30px] font-semibold">
+              {profileData?.following.length}
+            </div>
+          </div>
+          <div className="text-[18px] md:text-[22px] text-[#ffffffc7]">
+            Following
+          </div>
         </div>
       </div>
-
+      <div className="w-full flex justify-center items-center gap-[20px] mt-[10px]">
+        {/* buttons for follow/unfollow or edit profile can go here */}
+        {profileData?._id == userData?._id && <button className="px-[10px] min-w-[150px] py-[5px] h-[40px] bg-[white] cursor-pointer rounded-2xl">Edit Profile</button>}
+        {profileData?._id != userData?._id && <>
+             <button className="px-[10px] min-w-[150px] py-[5px] h-[40px] bg-[white] cursor-pointer rounded-2xl">Follow</button>
+             <button className="px-[10px] min-w-[150px] py-[5px] h-[40px] bg-[white] cursor-pointer rounded-2xl">Message</button>
+          </>}
+      </div>
     </div>
   );
 };
