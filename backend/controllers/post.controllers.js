@@ -33,10 +33,10 @@ export const uploadPost = async (req, res) => {
 
 export const getAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find({ author: req.userId }).populate(
+    const posts = await Post.find({}).populate(
       "author",
       "name userName profileImage",
-      "-password"
+      
     );
     return res.status(200).json(posts);
   } catch (error) {
@@ -80,7 +80,7 @@ export const comment = async (req, res) => {
         post.populate("comments.author");
         return res.status(200).json(post);
     } catch (error) {
-        return res.status(500).json({ message: `Liked post error: ${error}` });
+        return res.status(500).json({ message: `post comment error: ${error}` });
     }
 };
 
