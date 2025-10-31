@@ -12,17 +12,17 @@ export const Upload = () => {
   const [backendMedia, setBackendMedia] = useState(null);
   const [mediaType, setMediaType] = useState("");
   const mediaInput = useRef();
-    const handleMedia = (e) => {
+  const handleMedia = (e) => {
     const file = e.target.files[0];
-    if(file.type.includes("image")) {
-        setMediaType("image");
-    }else{
-        setMediaType("video");
+    if (file.type.includes("image")) {
+      setMediaType("image");
+    } else {
+      setMediaType("video");
     }
-    
+
     setBackendMedia(file);
     setFrontendMedia(URL.createObjectURL(file));
-    };
+  };
   return (
     <div className="w-full h-[100vh] bg-black flex flex-col items-center">
       <div className="w-full h-[80px] flex items-center gap-[20px] px-[10px]">
@@ -64,17 +64,50 @@ export const Upload = () => {
           Loop
         </div>
       </div>
-
-      <div
-        className="w-[80%] max-w-[500px] h-[250px] bg-[#0e1316] border-gray-800 border-2 flex flex-col items-center justify-center gap-[8px] mt-[15vh] rounded-2xl cursor-pointer hover:bg-[#353a3d]"
-        onClick={() => mediaInput.current.click()}
-      >
-        <input type="file" hidden ref={mediaInput} onChange={handleMedia}/>
-        <FiPlusSquare className="text-white w-[25px] h-[25px] cursor-pointer" />
-        <div className="text-white text-[19px] font-semibold">
-          Upload {uploadType}
+      {!frontendMedia && (
+        <div
+          className="w-[80%] max-w-[500px] h-[250px] bg-[#0e1316] border-gray-800 border-2 flex flex-col items-center justify-center gap-[8px] mt-[15vh] rounded-2xl cursor-pointer hover:bg-[#353a3d]"
+          onClick={() => mediaInput.current.click()}
+        >
+          <input type="file" hidden ref={mediaInput} onChange={handleMedia} />
+          <FiPlusSquare className="text-white w-[25px] h-[25px] cursor-pointer" />
+          <div className="text-white text-[19px] font-semibold">
+            Upload {uploadType}
+          </div>
         </div>
-      </div>
+      )}
+      {frontendMedia && (
+        <div className="w-[80%] max-w-[500px] h-[250px] flex flex-col items-center justify-center mt-[15vh]">
+          {mediaType == "image" && 
+            <div className="w-[80%] max-w-[500px] h-[250px] flex flex-col items-center justify-center mt-[5vh]">
+              <img src={frontendMedia} alt="" className="h-[60%] rounded-2xl" />
+              {uploadType != "story" && 
+                <input
+                  type="text"
+                  className="w-full border-b-gray-400 border-b-2 outline-none px-[10px] py-[5px] text-white mt-[20px]"
+                  placeholder="write caption"
+                />
+              }
+            </div>}
+            {mediaType == "video" && 
+            <div className="w-[80%] max-w-[500px] h-[250px] flex flex-col items-center justify-center mt-[5vh]">
+              <img src={frontendMedia} alt="" className="h-[60%] rounded-2xl" />
+              {uploadType != "story" && 
+                <input
+                  type="text"
+                  className="w-full border-b-gray-400 border-b-2 outline-none px-[10px] py-[5px] text-white mt-[20px]"
+                  placeholder="write caption"
+                />
+              }
+            </div>
+          }
+        </div>
+      )}
+      {frontendMedia && (
+        <button className="px-[10px] w-[60%] max-w-[400px] py-[5px] h-[50px] bg-[white] mt-[50px] cursor-pointer rounded-2xl">
+          Upload {uploadType}
+        </button>
+      )}
     </div>
   );
 };
