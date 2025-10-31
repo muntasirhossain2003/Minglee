@@ -8,6 +8,7 @@ import SignUp from "./pages/SignUp";
 import getSuggestedUsers from "./hooks/gerSuggestedUsers";
 import Profile from "./pages/Profile";
 import EditProfile from "./pages/EditProfile";
+import { Upload } from "./pages/Upload";
 
 export const serverUrl = "http://localhost:8000";
 
@@ -41,6 +42,14 @@ const App = () => {
       <Route
         path="/editprofile"
         element={userData ? <EditProfile /> : <Navigate to={"/signin"} />}
+      />
+      <Route
+        path="/editprofile"
+        element={userData ? <EditProfile /> : <Navigate to={"/signin"} />}
+      />
+      <Route
+        path="/upload"
+        element={userData ? <Upload /> : <Navigate to={"/signin"} />}
       />
     </Routes>
   );
