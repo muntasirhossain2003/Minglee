@@ -1,11 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./userSlice.js";
+import userSlice from "./userSlice.js";
+import postSlice from "./postSlice.js";
+import storySlice from "./storySlice.js";
+import loopSlice from "./loopSlice.js";
 
 const store = configureStore({
   reducer: {
-    user: userReducer,
+    user: userSlice,
+    post: postSlice,
+    story: storySlice,
+    loop: loopSlice,
   },
-  devTools: true,
+  
 });
 
 export default store;

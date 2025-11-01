@@ -2,9 +2,15 @@ import axios from "axios";
 import { useRef, useState } from "react";
 import { FiPlusSquare } from "react-icons/fi";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { serverUrl } from "../App";
 import VideoPlayer from "../components/VideoPlayer";
+import { setLoopData } from "../redux/loopSlice";
+import { setPostData } from "../redux/postSlice";
+import { setStoryData } from "../redux/storySlice";
+import { set } from "mongoose";
+import { ClipLoader } from "react-spinners";
 
 export const Upload = () => {
   const navigate = useNavigate();
@@ -14,6 +20,12 @@ export const Upload = () => {
   const [mediaType, setMediaType] = useState("");
   const [caption, setCaption] = useState("");
   const mediaInput = useRef();
+  const dispatch = useDispatch();
+  const { postData } = useSelector((state) => state.post);
+  const { storyData } = useSelector((state) => state.story);
+  const { loopData } = useSelector((state) => state.loop);
+  const [loading, setLoading] = useState(false);
+
   const handleMedia = (e) => {
     const file = e.target.files[0];
     if (file.type.includes("image")) {
@@ -27,6 +39,7 @@ export const Upload = () => {
   };
 
   const uploadPost = async () => {
+    
     try {
       const formData = new FormData();
       formData.append("caption", caption);
@@ -37,13 +50,17 @@ export const Upload = () => {
         formData,
         { withCredentials: true }
       );
-      console.log(result);
+      dispatch(setPostData([...postData, result.data]));
+      setLoading(false);
+      navigate("/");
     } catch (error) {
       console.error(error);
+      setLoading(false);
     }
   };
 
   const uploadStory = async () => {
+    
     try {
       const formData = new FormData();
       formData.append("mediaType", mediaType);
@@ -53,13 +70,17 @@ export const Upload = () => {
         formData,
         { withCredentials: true }
       );
-      console.log(result);
+      dispatch(setStoryData([...storyData, result.data]));
+      setLoading(false);
+      navigate("/");
     } catch (error) {
       console.error(error);
+      setLoading(false);
     }
   };
 
   const uploadLoop = async () => {
+    
     try {
       const formData = new FormData();
       formData.append("caption", caption);
@@ -69,17 +90,21 @@ export const Upload = () => {
         formData,
         { withCredentials: true }
       );
-      console.log(result);
+      dispatch(setLoopData([...loopData, result.data]));
+      setLoading(false);
+      navigate("/");
     } catch (error) {
       console.error(error);
+      setLoading(false);
     }
   };
   const handleUpload = () => {
+    setLoading(true);
     if (uploadType == "post") {
       uploadPost();
-    }else if (uploadType == "story") {
+    } else if (uploadType == "story") {
       uploadStory();
-    }else {
+    } else {
       uploadLoop();
     }
   };
@@ -173,8 +198,8 @@ export const Upload = () => {
         <button
           className="px-[10px] w-[60%] max-w-[400px] py-[5px] h-[50px] bg-[white] mt-[50px] cursor-pointer rounded-2xl"
           onClick={handleUpload}
-        >
-          Upload {uploadType}
+        >{loading? <ClipLoader size={30} color="black"/> : `Upload ${uploadType}`}
+
         </button>
       )}
     </div>
