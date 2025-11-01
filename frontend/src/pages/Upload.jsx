@@ -1,9 +1,10 @@
-import React from "react";
+import axios from "axios";
 import { useRef, useState } from "react";
+import { FiPlusSquare } from "react-icons/fi";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import { FiPlusSquare } from "react-icons/fi";
-import { set } from "mongoose";
+import { serverUrl } from "../App";
+import VideoPlayer from "../components/VideoPlayer";
 
 export const Upload = () => {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ export const Upload = () => {
   const [frontendMedia, setFrontendMedia] = useState(null);
   const [backendMedia, setBackendMedia] = useState(null);
   const [mediaType, setMediaType] = useState("");
+  const [caption, setCaption] = useState("");
   const mediaInput = useRef();
   const handleMedia = (e) => {
     const file = e.target.files[0];
@@ -23,6 +25,65 @@ export const Upload = () => {
     setBackendMedia(file);
     setFrontendMedia(URL.createObjectURL(file));
   };
+
+  const uploadPost = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("caption", caption);
+      formData.append("mediaType", mediaType);
+      formData.append("media", backendMedia);
+      const result = await axios.post(
+        `${serverUrl}/api/post/upload`,
+        formData,
+        { withCredentials: true }
+      );
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const uploadStory = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("mediaType", mediaType);
+      formData.append("media", backendMedia);
+      const result = await axios.post(
+        `${serverUrl}/api/story/upload`,
+        formData,
+        { withCredentials: true }
+      );
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const uploadLoop = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("caption", caption);
+      formData.append("media", backendMedia);
+      const result = await axios.post(
+        `${serverUrl}/api/loop/upload`,
+        formData,
+        { withCredentials: true }
+      );
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const handleUpload = () => {
+    if (uploadType == "post") {
+      uploadPost();
+    }else if (uploadType == "story") {
+      uploadStory();
+    }else {
+      uploadLoop();
+    }
+  };
+
   return (
     <div className="w-full h-[100vh] bg-black flex flex-col items-center">
       <div className="w-full h-[80px] flex items-center gap-[20px] px-[10px]">
@@ -78,33 +139,41 @@ export const Upload = () => {
       )}
       {frontendMedia && (
         <div className="w-[80%] max-w-[500px] h-[250px] flex flex-col items-center justify-center mt-[15vh]">
-          {mediaType == "image" && 
+          {mediaType == "image" && (
             <div className="w-[80%] max-w-[500px] h-[250px] flex flex-col items-center justify-center mt-[5vh]">
               <img src={frontendMedia} alt="" className="h-[60%] rounded-2xl" />
-              {uploadType != "story" && 
+              {uploadType != "story" && (
                 <input
                   type="text"
                   className="w-full border-b-gray-400 border-b-2 outline-none px-[10px] py-[5px] text-white mt-[20px]"
                   placeholder="write caption"
+                  onChange={(e) => setCaption(e.target.value)}
+                  value={caption}
                 />
-              }
-            </div>}
-            {mediaType == "video" && 
-            <div className="w-[80%] max-w-[500px] h-[250px] flex flex-col items-center justify-center mt-[5vh]">
-              <img src={frontendMedia} alt="" className="h-[60%] rounded-2xl" />
-              {uploadType != "story" && 
-                <input
-                  type="text"
-                  className="w-full border-b-gray-400 border-b-2 outline-none px-[10px] py-[5px] text-white mt-[20px]"
-                  placeholder="write caption"
-                />
-              }
+              )}
             </div>
-          }
+          )}
+          {mediaType == "video" && (
+            <div className="w-[80%] max-w-[500px] h-[250px] flex flex-col items-center justify-center mt-[5vh]">
+              <VideoPlayer media={frontendMedia} />
+              {uploadType != "story" && (
+                <input
+                  type="text"
+                  className="w-full border-b-gray-400 border-b-2 outline-none px-[10px] py-[5px] text-white mt-[20px]"
+                  placeholder="write caption"
+                  onChange={(e) => setCaption(e.target.value)}
+                  value={caption}
+                />
+              )}
+            </div>
+          )}
         </div>
       )}
       {frontendMedia && (
-        <button className="px-[10px] w-[60%] max-w-[400px] py-[5px] h-[50px] bg-[white] mt-[50px] cursor-pointer rounded-2xl">
+        <button
+          className="px-[10px] w-[60%] max-w-[400px] py-[5px] h-[50px] bg-[white] mt-[50px] cursor-pointer rounded-2xl"
+          onClick={handleUpload}
+        >
           Upload {uploadType}
         </button>
       )}
