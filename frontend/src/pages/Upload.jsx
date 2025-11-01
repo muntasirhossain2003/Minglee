@@ -1,7 +1,9 @@
+import axios from "axios";
 import { useRef, useState } from "react";
 import { FiPlusSquare } from "react-icons/fi";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { serverUrl } from "../App";
 import VideoPlayer from "../components/VideoPlayer";
 
 export const Upload = () => {
@@ -24,7 +26,63 @@ export const Upload = () => {
     setFrontendMedia(URL.createObjectURL(file));
   };
 
-  
+  const uploadPost = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("caption", caption);
+      formData.append("mediaType", mediaType);
+      formData.append("media", backendMedia);
+      const result = await axios.post(
+        `${serverUrl}/api/post/upload`,
+        formData,
+        { withCredentials: true }
+      );
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const uploadStory = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("mediaType", mediaType);
+      formData.append("media", backendMedia);
+      const result = await axios.post(
+        `${serverUrl}/api/story/upload`,
+        formData,
+        { withCredentials: true }
+      );
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const uploadLoop = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("caption", caption);
+      formData.append("media", backendMedia);
+      const result = await axios.post(
+        `${serverUrl}/api/loop/upload`,
+        formData,
+        { withCredentials: true }
+      );
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const handleUpload = () => {
+    if (uploadType == "post") {
+      uploadPost();
+    }else if (uploadType == "story") {
+      uploadStory();
+    }else {
+      uploadLoop();
+    }
+  };
 
   return (
     <div className="w-full h-[100vh] bg-black flex flex-col items-center">
@@ -112,7 +170,10 @@ export const Upload = () => {
         </div>
       )}
       {frontendMedia && (
-        <button className="px-[10px] w-[60%] max-w-[400px] py-[5px] h-[50px] bg-[white] mt-[50px] cursor-pointer rounded-2xl">
+        <button
+          className="px-[10px] w-[60%] max-w-[400px] py-[5px] h-[50px] bg-[white] mt-[50px] cursor-pointer rounded-2xl"
+          onClick={handleUpload}
+        >
           Upload {uploadType}
         </button>
       )}
