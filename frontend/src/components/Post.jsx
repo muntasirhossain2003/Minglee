@@ -1,15 +1,32 @@
+import axios from "axios";
+import { useState } from "react";
 import { GoHeart, GoHeartFill } from "react-icons/go";
+import { IoSendSharp } from "react-icons/io5";
 import {
   MdOutlineBookmark,
   MdOutlineBookmarkBorder,
   MdOutlineComment,
 } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { serverUrl } from "../App";
 import dp from "../assets/empty_dp.png";
 import VideoPlayer from "./VideoPlayer";
 
 function Post({ postData }) {
   const { userData } = useSelector((state) => state.user);
+  const [showComment, setShowComment] = useState(true);
+  const dispatch = useDispatch();
+  const handleLike = async () => {
+    try {
+      const result = await axios.get(
+        `${serverUrl}/api/post/like/${postData._id}`,
+        {
+          withCredentials: true,
+        }
+      );
+      const updatedPost = result.data;
+    } catch (error) {}
+  };
   return (
     <div className="w-[90%] flex flex-col gap-[10px] bg-white items-center shadow-2xl shadow-[#00000058] rounded-2xl pb-[20px]">
       <div className="w-full h-[80px] flex justify-between items-center px-[10px]">
@@ -74,6 +91,27 @@ function Post({ postData }) {
         <div className="w-full px-[20px] gap-[10px] flex justify-start items-center">
           <h1>{postData.author.userName}</h1>
           <div>{postData.caption}</div>
+        </div>
+      )}
+      {showComment && (
+        <div className="w-full flex flex-col gap-[30px] pb-[20px] ">
+          <div className="w-full h-[80px] flex items-center justify-between px-[20px] relative">
+            <div className="w-[40px] h-[40px] md:w-[60px] md:h-[60px] border-2 border-black rounded-full cursor-pointer overflow-hidden">
+              <img
+                src={postData.author?.profileImage || dp}
+                alt="profile image"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <input
+              type="text"
+              className="px-[10px] border-b-2 border-b-gray-500 w-[90%] outline-none h-[40px]"
+              placeholder="Write Comment"
+            />
+            <button className="absolute right-[20px] cursor-pointer">
+              <IoSendSharp className="w-[25px] h-[25px]" />
+            </button>
+          </div>
         </div>
       )}
     </div>
