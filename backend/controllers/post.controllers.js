@@ -37,7 +37,7 @@ export const getAllPosts = async (req, res) => {
       "author",
       "name userName profileImage",
       
-    );
+    ).sort({ createdAt: -1 });
     return res.status(200).json(posts);
   } catch (error) {
     return res.status(500).json({ message: `Get all posts error: ${error}` });
