@@ -1,24 +1,25 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { setUserData } from "../redux/userSlice";
+
+import { setPostData } from "../redux/postSlice";
 export const serverUrl = "http://localhost:8000";
 
-const getCurrentUser = () => {
+const getAllPost = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchPost = async () => {
       try {
-        const result = await axios.get(`${serverUrl}/api/user/current`, {
+        const result = await axios.get(`${serverUrl}/api/post/getAll`, {
           withCredentials: true,
         });
-        dispatch(setUserData(result.data));
+        dispatch(setPostData(result.data));
       } catch (error) {
         console.log(error);
       }
     };
-    fetchUser();
-  }, []);
+    fetchPost();
+  }, [dispatch]);
 };
 
-export default getCurrentUser;
+export default getAllPost;

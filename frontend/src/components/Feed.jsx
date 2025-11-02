@@ -4,8 +4,11 @@ import { IoChevronBackCircle, IoChevronForwardCircle } from "react-icons/io5";
 import logo from "../assets/icon.png";
 import StoryDp from "./StoryDp";
 import Nav from "./Nav";
+import Post from "./Post";
+import { useSelector } from 'react-redux';
 
 const Feed = () => {
+  const { postData } = useSelector((state) => state.post);
   const scrollContainerRef = useRef(null);
   const [showLeftButton, setShowLeftButton] = useState(false);
   const [showRightButton, setShowRightButton] = useState(false);
@@ -104,6 +107,7 @@ const Feed = () => {
       {/* feed content */}
       <div className="w-full min-h-[100vh] flex flex-col items-center gap-[20px] p-[10px] pt-[40px] bg-white rounded-t-[60px] relative pb-[120px]">
         <Nav />
+        {postData?.map((post, index) => (<Post key={index} postData={post} />))}
       </div>
     </div>
   );
