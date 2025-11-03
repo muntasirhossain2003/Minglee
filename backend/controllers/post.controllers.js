@@ -47,6 +47,7 @@ export const getAllPosts = async (req, res) => {
 export const like = async (req, res) => {
     try {
         const postId = req.params.postId;
+        
         const post = await Post.findById(postId);
         if(!post){
             return res.status(400).json({ message: "Post not found" });
@@ -59,7 +60,7 @@ export const like = async (req, res) => {
             post.likes.push(req.userId);
         }
         await post.save();
-        post.populate("author", "name userName profileImage");
+        await post.populate("author", "name userName profileImage");
         return res.status(200).json(post);
     } catch (error) {
         return res.status(500).json({ message: `Liked post error: ${error}` });
@@ -76,8 +77,8 @@ export const comment = async (req, res) => {
         }
         post.comments.push({ author: req.userId, message });
         await post.save();
-        post.populate("author", "name userName profileImage");
-        post.populate("comments.author");
+        await post.populate("author", "name userName profileImage");
+        await post.populate("comments.author");
         return res.status(200).json(post);
     } catch (error) {
         return res.status(500).json({ message: `post comment error: ${error}` });
