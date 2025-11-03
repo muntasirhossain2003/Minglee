@@ -107,7 +107,7 @@ const Feed = () => {
       {/* feed content */}
       <div className="w-full min-h-[100vh] flex flex-col items-center gap-[20px] p-[10px] pt-[40px] bg-white rounded-t-[60px] relative pb-[120px]">
         <Nav />
-        {postData?.map((post, index) => (<Post key={index} postData={post} />))}
+        {postData?.map((post, index) => (<Post key={index} post={post} />))}
       </div>
     </div>
   );
