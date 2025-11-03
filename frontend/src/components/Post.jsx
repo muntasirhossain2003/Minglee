@@ -11,12 +11,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { serverUrl } from "../App";
 import dp from "../assets/empty_dp.png";
 import { setPostData } from "../redux/postSlice";
+import { setUserData } from "../redux/userSlice";
 import VideoPlayer from "./VideoPlayer";
 
 function Post({ post }) {
   const { userData } = useSelector((state) => state.user);
   const { postData } = useSelector((state) => state.post);
-  const [showComment, setShowComment] = useState(true);
+  const [showComment, setShowComment] = useState(false);
+  const [message, setMessage] = useState("");
   const dispatch = useDispatch();
   const handleLike = async () => {
     try {
@@ -28,7 +30,44 @@ function Post({ post }) {
         p.id == post.id ? updatedPost : p
       );
       dispatch(setPostData(updatedPosts));
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleComment = async () => {
+    try {
+      const result = await axios.post(
+        `${serverUrl}/api/post/comment/${post._id}`,
+        { message },
+        {
+          withCredentials: true,
+        }
+      );
+      const updatedPost = result.data;
+      const updatedPosts = postData.map((p) =>
+        p.id == post.id ? updatedPost : p
+      );
+      dispatch(setPostData(updatedPosts));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSave = async () => {
+    try {
+      const result = await axios.get(
+        `${serverUrl}/api/post/saved/${post._id}`,
+
+        {
+          withCredentials: true,
+        }
+      );
+
+      dispatch(setUserData(result.data));
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div className="w-[90%] flex flex-col gap-[10px] bg-white items-center shadow-2xl shadow-[#00000058] rounded-2xl pb-[20px]">
@@ -79,24 +118,33 @@ function Post({ post }) {
             )}
             <span>{post.likes.length}</span>
           </div>
-          <div className="flex justify-center items-center gap-[5px]">
+          <div
+            className="flex justify-center items-center gap-[5px]"
+            onClick={() => setShowComment((prev) => !prev)}
+          >
             <MdOutlineComment className="w-[25px] cursor-pointer h-[25px]" />
             <span>{post.comments.length}</span>
           </div>
         </div>
-        <div>
-          {!userData.saved.includes(post?._id) && (
+        <div onClick={handleSave}>
+          {!userData?.saved?.some(
+            (s) => (s._id || s)?.toString() === post?._id?.toString()
+          ) && (
             <MdOutlineBookmarkBorder className="w-[25px] cursor-pointer h-[25px]" />
           )}
-          {userData.saved.includes(post?._id) && (
+          {userData?.saved?.some(
+            (s) => (s._id || s)?.toString() === post?._id?.toString()
+          ) && (
             <MdOutlineBookmark className="w-[25px] cursor-pointer h-[25px]" />
           )}
         </div>
       </div>
       {post.caption && (
         <div className="w-full px-[20px] gap-[10px] flex justify-start items-center">
-          <h1>{post.author.userName}</h1>
-          <div>{post.caption}</div>
+          <h1 className="font-semibold text-gray-800">
+            {post.author.userName}
+          </h1>
+          <div className="font-bold">{post.caption}</div>
         </div>
       )}
       {showComment && (
@@ -104,7 +152,7 @@ function Post({ post }) {
           <div className="w-full h-[80px] flex items-center justify-between px-[20px] relative">
             <div className="w-[40px] h-[40px] md:w-[60px] md:h-[60px] border-2 border-black rounded-full cursor-pointer overflow-hidden">
               <img
-                src={post.author?.profileImage || dp}
+                src={userData?.profileImage || dp}
                 alt="profile image"
                 className="w-full h-full object-cover"
               />
@@ -113,10 +161,32 @@ function Post({ post }) {
               type="text"
               className="px-[10px] border-b-2 border-b-gray-500 w-[90%] outline-none h-[40px]"
               placeholder="Write Comment"
+              onChange={(e) => setMessage(e.target.value)}
+              value={message}
             />
-            <button className="absolute right-[20px] cursor-pointer">
+            <button
+              className="absolute right-[20px] cursor-pointer"
+              onClick={handleComment}
+            >
               <IoSendSharp className="w-[25px] h-[25px]" />
             </button>
+          </div>
+          <div className="w-full max-h-[300px] overflow-auto">
+            {post.comments?.map((com, index) => (
+              <div
+                key={index}
+                className="w-full px-[20px] py-[20px] flex items-center gap-[20px] border-b-2 border-b-gray-200"
+              >
+                <div className="w-[40px] h-[40px] md:w-[60px] md:h-[60px] border-2 border-black rounded-full cursor-pointer overflow-hidden">
+                  <img
+                    src={com.author?.profileImage || dp}
+                    alt="profile image"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div>{com.message}</div>
+              </div>
+            ))}
           </div>
         </div>
       )}
