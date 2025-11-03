@@ -16,5 +16,5 @@ postRouter.post("/upload", isAuth, upload.single("media"), uploadPost);
 postRouter.get("/getAll", isAuth, getAllPosts);
 postRouter.get("/like/:postId", isAuth, like);
 postRouter.get("/saved/:postId", isAuth, saved);
-postRouter.post("/comment", isAuth, comment);
+postRouter.post("/comment/:postId", isAuth, comment);
 export default postRouter;

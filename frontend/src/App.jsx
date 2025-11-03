@@ -1,15 +1,15 @@
 import { useSelector } from "react-redux";
 import { Navigate, Route, Routes } from "react-router-dom";
+import getSuggestedUsers from "./hooks/gerSuggestedUsers";
+import getAllPost from "./hooks/getAllPost";
 import getCurrentUser from "./hooks/getCurrentUser";
+import EditProfile from "./pages/EditProfile";
 import ForgotPassword from "./pages/ForgotPassword";
 import Home from "./pages/Home";
+import Profile from "./pages/Profile";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
-import getSuggestedUsers from "./hooks/gerSuggestedUsers";
-import Profile from "./pages/Profile";
-import EditProfile from "./pages/EditProfile";
 import { Upload } from "./pages/Upload";
-import getAllPost from "./hooks/getAllPost";
 
 export const serverUrl = "http://localhost:8000";
 
