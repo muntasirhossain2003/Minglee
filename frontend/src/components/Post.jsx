@@ -12,6 +12,7 @@ import { serverUrl } from "../App";
 import dp from "../assets/empty_dp.png";
 import { setPostData } from "../redux/postSlice";
 import { setUserData } from "../redux/userSlice";
+import FollowButton from "./FollowButton";
 import VideoPlayer from "./VideoPlayer";
 
 function Post({ post }) {
@@ -84,9 +85,14 @@ function Post({ post }) {
             {post.author.userName}
           </div>
         </div>
-        <button className="px-[10px] w-[60px] md:w-[100px] py-[5px] h-[30px] md:h-[40px] bg-[black] text-white rounded-2xl text-[14px] md:text-[16px]">
-          Follow
-        </button>
+        {userData._id != post.author._id && (
+          <FollowButton
+            tailwind={
+              "px-[10px] w-[60px] md:w-[100px] py-[5px] h-[30px] md:h-[40px] bg-[black] text-white rounded-2xl text-[14px] md:text-[16px]"
+            }
+            targetUserId={post.author._id}
+          />
+        )}
       </div>
       <div className="w-[90%]  flex items-center justify-center ">
         {post.mediaType == "image" && (
