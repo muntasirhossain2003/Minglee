@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { setUserData } from "../redux/userSlice";
+import { setFollowing, setUserData } from "../redux/userSlice";
 export const serverUrl = "http://localhost:8000";
 
 const getCurrentUser = () => {
@@ -13,6 +13,7 @@ const getCurrentUser = () => {
           withCredentials: true,
         });
         dispatch(setUserData(result.data.user));
+        dispatch(setFollowing(result.data.user.following));
       } catch (error) {
         console.log(error);
       }

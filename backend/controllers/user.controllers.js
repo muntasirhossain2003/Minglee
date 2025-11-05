@@ -70,7 +70,7 @@ export const editProfile = async (req, res) => {
 export const getProfile = async (req, res) => {
   try {
     const userName = req.params.userName;
-    const user = await User.findOne({ userName }).select("-password");
+    const user = await User.findOne({ userName }).select("-password").populate("posts loops followers following");
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
