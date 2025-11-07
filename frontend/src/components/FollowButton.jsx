@@ -3,9 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { serverUrl } from "../App";
 import { toggleFollow } from "../redux/userSlice";
 
-function FollowButton({ targetUserId, tailwind }) {
-  const following = useSelector((state) => state.user.following);
-  const isFollowing = following.includes(targetUserId);
+function FollowButton({ targetUserId, tailwind, onFollowChange }) {
+  const following = useSelector(
+    (state) => state.user?.userData?.following || []
+  );
+  const isFollowing = following.some((id) => {
+    const idStr = (id?._id || id)?.toString();
+    const targetIdStr = targetUserId?.toString();
+    return idStr === targetIdStr;
+  });
   const dispatch = useDispatch();
   const handleFollow = async () => {
     try {
@@ -15,6 +21,9 @@ function FollowButton({ targetUserId, tailwind }) {
           withCredentials: true,
         }
       );
+      if (onFollowChange) {
+        onFollowChange();
+      }
       dispatch(toggleFollow(targetUserId));
     } catch (error) {
       console.log(error);

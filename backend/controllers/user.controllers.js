@@ -1,11 +1,19 @@
-import { CURSOR_FLAGS } from "mongodb";
 import uploadOnCloudinary from "../config/cloudinary.js";
 import User from "../models/user.model.js";
 
 export const getCurrentUser = async (req, res) => {
   try {
     const userId = req.userId;
-    const user = await User.findById(userId).populate("posts loops");
+    const user = await User.findById(userId)
+      .populate({
+        path: "saved",
+        populate: {
+          path: "author",
+          select: "name userName profileImage"
+        }
+      })
+      .populate("posts loops followers following")
+      .select("-password");
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
@@ -70,7 +78,7 @@ export const editProfile = async (req, res) => {
 export const getProfile = async (req, res) => {
   try {
     const userName = req.params.userName;
-    const user = await User.findOne({ userName }).select("-password");
+    const user = await User.findOne({ userName }).select("-password").populate("posts loops followers following");
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
