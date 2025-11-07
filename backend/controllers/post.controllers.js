@@ -86,6 +86,19 @@ export const comment = async (req, res) => {
   }
 };
 
+export const getPostById = async (req, res) => {
+  try {
+    const postId = req.params.postId;
+    const post = await Post.findById(postId)
+      .populate("author", "name userName profileImage")
+      .populate("comments.author", "name userName profileImage");
+    if (!post) return res.status(404).json({ message: "Post not found" });
+    return res.status(200).json(post);
+  } catch (error) {
+    return res.status(500).json({ message: `Get post error: ${error}` });
+  }
+};
+
 export const saved = async (req, res) => {
   try {
     const postId = req.params.postId;

@@ -24,10 +24,22 @@ const userSlice = createSlice({
     },
     toggleFollow: (state, action) => {
       const targetUserId = action.payload;
-      if(state.following.includes(targetUserId)) {
-        state.following = state.following.filter(id => id != targetUserId);
+      if (!state.userData) return;
+      
+      const isFollowing = state.userData.following.some(id => {
+        const idStr = (id?._id || id)?.toString();
+        const targetIdStr = targetUserId?.toString();
+        return idStr === targetIdStr;
+      });
+      
+      if (isFollowing) {
+        state.userData.following = state.userData.following.filter(id => {
+          const idStr = (id?._id || id)?.toString();
+          const targetIdStr = targetUserId?.toString();
+          return idStr !== targetIdStr;
+        });
       } else {
-        state.following.push(targetUserId);
+        state.userData.following.push(targetUserId);
       }
     },
   },

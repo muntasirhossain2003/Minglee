@@ -4,8 +4,14 @@ import { serverUrl } from "../App";
 import { toggleFollow } from "../redux/userSlice";
 
 function FollowButton({ targetUserId, tailwind, onFollowChange }) {
-  const following = useSelector((state) => state.user.following);
-  const isFollowing = following.includes(targetUserId);
+  const following = useSelector(
+    (state) => state.user?.userData?.following || []
+  );
+  const isFollowing = following.some((id) => {
+    const idStr = (id?._id || id)?.toString();
+    const targetIdStr = targetUserId?.toString();
+    return idStr === targetIdStr;
+  });
   const dispatch = useDispatch();
   const handleFollow = async () => {
     try {
