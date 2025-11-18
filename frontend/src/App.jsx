@@ -10,6 +10,9 @@ import Profile from "./pages/Profile";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import { Upload } from "./pages/Upload";
+import Loops from "./pages/Loops";
+import { get } from "mongoose";
+import getAllLoops from "./hooks/getAllLoops";
 
 export const serverUrl = "http://localhost:8000";
 
@@ -17,6 +20,7 @@ const App = () => {
   getCurrentUser();
   getSuggestedUsers();
   getAllPost();
+  getAllLoops();
   const { userData } = useSelector((state) => state.user);
 
   return (
@@ -45,13 +49,14 @@ const App = () => {
         path="/editprofile"
         element={userData ? <EditProfile /> : <Navigate to={"/signin"} />}
       />
-      <Route
-        path="/editprofile"
-        element={userData ? <EditProfile /> : <Navigate to={"/signin"} />}
-      />
+      
       <Route
         path="/upload"
         element={userData ? <Upload /> : <Navigate to={"/signin"} />}
+      />
+      <Route
+        path="/loops"
+        element={userData ? <Loops /> : <Navigate to={"/signin"} />}
       />
     </Routes>
   );
