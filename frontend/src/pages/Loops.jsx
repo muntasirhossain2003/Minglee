@@ -16,7 +16,11 @@ function Loops() {
         <h1 className="text-white font-semibold text-[20px]">Loops</h1>
       </div>
       <div className="h-[100vh] overflow-y-scroll snap-y snap-mandatory scrollbar-hide">
-        {loopData.map((loop, index) => (<div className="h-screen snap-start"><LoopCard  loop={loop} key={index} /></div>))}
+        {loopData.map((loop, index) => (
+          <div key={loop?._id || loop?.id || index} className="h-screen snap-start">
+            <LoopCard loop={loop} />
+          </div>
+        ))}
       </div>
       
     </div>
